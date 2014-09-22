@@ -21,13 +21,13 @@ describe SeriesMasterOfTheUniverse do
 
 	describe '#most_famous_cast_member' do
 		it 'It announces who the most famous cast member in the TV series is' do
-			(TVSeries.new("Friends")).should == "Jennifer Aniston"
+			expect(TVSeries.new("Friends")).to eq("Jennifer Aniston")
 		end
 	end
 
 	describe '#sort_by_mpaa_rating' do
 		it 'Sorts by the MPAA rating of the TV series' do
-			TVSeries.new("Game of Thrones").should == 'R'
+			expect(TVSeries.new("Game of Thrones")).to eq('R')
 		end
 	end
 end
