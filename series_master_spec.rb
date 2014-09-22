@@ -7,7 +7,7 @@ describe SeriesMasterOfTheUniverse do
 
 	describe '#sort_by_rating' do
 		it 'It sorts the list of TV Series by rating' do
-			expect(@series_object.sort_by_rating.map{|x| x.series_rating}).to eq([9.5, 9.0, 7.8])
+			expect(@series_object.sort_by_rating.map{|x| x.series_rating}).to eq([9.5, 9.0, 9.0, 7.8])
 		end
 	end
 
@@ -21,16 +21,31 @@ describe SeriesMasterOfTheUniverse do
 
 	describe '#most_famous_cast_member' do
 		it 'It announces who the most famous cast member in the TV series is' do
-			expect(TVSeries.new("Friends")).to eq("Jennifer Aniston")
+			expect(@series_object.most_famous_cast_member(TVSeries.new("Friends"))).to eq("Jennifer Aniston")
 		end
 	end
 
-	describe '#sort_by_mpaa_rating' do
-		it 'Sorts by the MPAA rating of the TV series' do
-			expect(TVSeries.new("Game of Thrones")).to eq('R')
+	describe '#find_series_of_genre' do
+		it 'finds series of a given genre' do
+			expect(@series_object.find_series_of_genre("Action")).to eq(["Game of Thrones"])
 		end
 	end
+
+	describe '#search_by_word' do
+		it 'searches imbd by a given word and returns number of results' do
+			expect(@series_object.search_by_word("Cat")).to eq(202)
+		end
+	end
+
+	describe '#most_episodes' do
+		it 'shows the series with biggest number of episodes' do
+			expect(@series_object.most_episodes).to eq("Friends")
+		end
+	end 
+
 end
+
+
 
 describe TVSeries do
 

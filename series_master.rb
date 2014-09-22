@@ -4,7 +4,7 @@ class SeriesMasterOfTheUniverse
 	attr_accessor :series
 
 	def initialize
-		@series = [TVSeries.new("Game of Thrones"), TVSeries.new("RuPaul's Drag Race"), TVSeries.new("Dexter")]
+		@series = [TVSeries.new("Game of Thrones"), TVSeries.new("RuPaul's Drag Race"), TVSeries.new("Dexter"), TVSeries.new("Friends")]
 	end
 
 	def sort_by_rating
@@ -25,19 +25,53 @@ class SeriesMasterOfTheUniverse
 		end
 	end
 
+	def most_famous_cast_member(tv_series)
+		return tv_series.actor
+	end
+
+	def find_series_of_genre(series_genre)
+		@series.select do |series|
+				series.genre.include? series_genre 
+		end.map {|series| series.title }
+	end
+
+	def search_by_word(word)
+		Imdb::Search.new(word).movies.size
+	end
+
+	def most_episodes
+		sorted_movie = []
+		@series.sort_by { |x| x.number_of_episodes }.reverse.each {|x| sorted_movie << x}
+		return sorted_movie[0].title
+	end
+
 end
 
 class TVSeries
-	attr_accessor :title, :series_rating, :actor
+	attr_accessor :title, :series_rating, :actor, :genre, :number_of_episodes, :imdb_id
 
 	def initialize(title)
 		@title = title
 		search_result = Imdb::Search.new(title).movies.first
 		@series_rating = search_result.rating
 		@actor = search_result.cast_members.first
-		@content_rating = search_result.mpaa_rating
+		@genre = search_result.genres
+		@imdb_id = search_result.id 
+		@number_of_episodes = get_number_of_episodes
+	end
+
+	def get_number_of_episodes
+		total_eps = 0
+		series = Imdb::Serie.new(@imdb_id)
+		seasons_num = series.seasons.size 
+		for i in 1..seasons_num
+			total_eps += series.season(i).episodes.size
+		end
+		return total_eps
 	end
 end
 
+
+
 tv = SeriesMasterOfTheUniverse.new
-tv.print_movies_sorted_by_rating
+# tv.print_movies_sorted_by_rating
